@@ -32,8 +32,7 @@ function getRandomBeer(){
 		var pageNumber = Math.floor(randomProductIndex / recordsPerPage) + 1;			
 		var indexOnPage = randomProductIndex % recordsPerPage;	
 			
-		$.ajax({
-		  //note: contrary to the API doc, "where_not=is_dead" doesn't seem necessary... looks like dead products aren't included unless specifically requested with where="is_dead"
+		$.ajax({		 
 		  url: "http://lcboapi.com/products?store_id=" + storeNumber + "&q=" + searchString + "&per_page=" + recordsPerPage + "&where_not=is_dead&page=" + pageNumber,
 		  dataType: "jsonp"
 		
