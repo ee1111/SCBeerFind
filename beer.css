@@ -1,0 +1,21 @@
+
+body {
+	text-align:center;
+	font-family: arial;
+}
+
+#beerInfo, #getBeer, #beerLoading {
+	display: none;
+}
+
+#beerName {
+	font-size: 200%;
+}
+
+#getBeer {
+	margin: 30px;
+}
+
+#beerLoading{
+	padding:40px;
+}
