@@ -1,6 +1,6 @@
 var storeNumber = 511;
 var searchString = "beer";
-var desiredPrimaryCategory = "Beer"; //"primary_category" attribute of the desired product, to make sure it is really beer (can't search by this)
+var desiredPrimaryCategory = "Beer"; //"primary_category" attribute of the desired product
 var recordsPerPage = 5; //API docs don't mention this, but minimum per page is 5
 
 //Possible products, by index within search results.
@@ -54,30 +54,29 @@ function getRandomBeer(){
  */
 function verifyBeerSelection(theBeer){
 
-		console.log("Selected product #" + theBeer.id + " - " + theBeer.name + ", verifying selection...")							;
-								
-		if(theBeer.primary_category != desiredPrimaryCategory){			
-			//filter for the occasional non-beer with the word "beer" in the name (e.g. beer-themed tote bag, non-alcoholic beer...)			
-			rejectBeer(theBeer, "Not a beer");				
-		} else if (	localStorage.getItem(storagePrefix + theBeer.id) != null){						
-			rejectBeer(theBeer, "Already selected");				
-		} else {		
-	
-			//verify store inventory - requires a separate search
-			$.ajax({			  
-			  url: "http://lcboapi.com/stores/" + storeNumber + "/products/" + theBeer.id + "/inventory",
-			  dataType: "jsonp"			
-			}).then(function(data) {
-				var numberInStock = data.result.quantity;			
-				if(numberInStock > 0){	
-					acceptBeer(theBeer, numberInStock);							
-				} else {
-					//Occasionally there is no inventory of a beer they normally have in stock - try again if this is the case.
-					rejectBeer(theBeer, "Not in stock");
-				}
-			});
-						
-		}
+	console.log("Selected product #" + theBeer.id + " - " + theBeer.name + ", verifying selection...")							;
+							
+	if(theBeer.primary_category != desiredPrimaryCategory){			
+		//filter for the occasional non-beer with the word "beer" in the name (e.g. beer-themed tote bag, non-alcoholic beer...)			
+		rejectBeer(theBeer, "Not a beer");				
+	} else if (	localStorage.getItem(storagePrefix + theBeer.id) != null){						
+		rejectBeer(theBeer, "Already selected");				
+	} else {		
+
+		//verify store inventory - requires a separate search
+		$.ajax({			  
+		  url: "http://lcboapi.com/stores/" + storeNumber + "/products/" + theBeer.id + "/inventory",
+		  dataType: "jsonp"			
+		}).then(function(data) {
+			var numberInStock = data.result.quantity;			
+			if(numberInStock > 0){	
+				acceptBeer(theBeer, numberInStock);							
+			} else {
+				rejectBeer(theBeer, "Not in stock");
+			}
+		});
+					
+	}
 }
 
 /*
